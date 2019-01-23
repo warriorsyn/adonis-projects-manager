@@ -12,9 +12,11 @@ class ProjectController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index ({ request }) {
 
-    const projects = await Project.query().with('user').fetch()
+    const { page } = request.get()
+
+    const projects = await Project.query().with('user').paginate(page || 1)
 
     return projects
 
@@ -25,7 +27,7 @@ class ProjectController {
     const data = request.only(['title', 'description'])
 
     const project = await Project.create({ ...data, user_id: auth.user.id })
-
+    
     return project
   }
 
@@ -44,7 +46,7 @@ class ProjectController {
     await project.load('tasks')
     return project
   }
- 
+
   async update ({ params, request }) {
 
     const project = await Project.findOrFail(params.id)
@@ -55,7 +57,7 @@ class ProjectController {
     await project.save()
 
     return project
-    
+
   }
 
   async destroy ({ params, request, response }) {

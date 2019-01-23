@@ -5,6 +5,12 @@ const Model = use('Model')
 
 class Task extends Model {
 
+    static boot () {
+      super.boot()
+
+      this.addHook('beforeSave', 'TaskHook.sendNewTaskMail')
+    }
+
     project () {
         return this.belongsTo('App/Models/Project')
     }
