@@ -9,8 +9,8 @@ class UserController {
 
         if(await User.findBy('email', data.email))
             return {error: "User already exists!"}
-        
-        const user = await User.crreate(data)    
+
+        const user = await User.create(data)
 
         return user
     }
